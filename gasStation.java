@@ -5,20 +5,31 @@ public class gasStation
     private double regprice; //price for a gallon of regular
     private double superprice; //price for a gallon of super
     private double sales; //total sales of stations in dollars
+    private double amount; //total amount of gallons in the station
 
     public gasStation(double r, double s) 
     {
         regprice = r;
         superprice = s;
         sales = 0;
+        amount = 1000;
     }
 
     public void sellregular(double gallons) 
     {
+        amount -= amount - gallons;
         sales += regprice * gallons; //multiplication
+
     }
 
     public void sellsuper(double gallons) 
+    {
+        amount -= amount - gallons;
+        sales += superprice * gallons;
+
+    }
+
+    public void gasamount(double gallons) 
     {
         sales += superprice * gallons;
 
@@ -27,6 +38,11 @@ public class gasStation
     public double getSales() 
     {
         return sales;
+    }
+
+    public double getGallons() 
+    {
+        return amount;
     }
 
     public boolean moreProfit(gasStation other) 
@@ -42,13 +58,23 @@ public class gasStation
 
     public static void main(String[] argv) 
     {
+        
         gasStation A = new gasStation(1.69, 2.09);
         gasStation B = new gasStation(2.49, 2.99);
-
+        System.out.println("Gallons = "+ A.getGallons());
+        System.out.println("Gallons = "+ B.getGallons());
+        // determine what is setting gallons to less than a reasonable amount
+        //A.gouge();
+        //B.gouge();
         A.sellregular(10);
         A.sellsuper(8);
         B.sellregular(11);
         B.sellsuper(12);
+
+        System.out.println("Sales = "+ A.getSales());
+        System.out.println("Sales = "+ B.getSales());
+        System.out.println("Gallons = "+ A.getGallons());
+        System.out.println("Gallons = "+ B.getGallons());
 
         if (A.moreProfit(B)) 
         {
@@ -69,17 +95,24 @@ public class gasStation
         {
             G[i].sellregular((int) Math.random() * 20);
             G[i].sellsuper((int) Math.random() * 20);
+            System.out.println("Gas Station Balance " + i);
+            System.out.println("Gas Station Supply " + G[i].getGallons());
+            if (G[i].getGallons() == 200 || G[i].getGallons() < 200)
+                {
+                    System.out.println("Gas Station " + i + " has less than 200 gallons.");
+                    System.out.println("Gas Station " + i + " had its prices gouged.");
+                }
         }
 
         gasStation highest = G[0];
         for (int i = 1; i < 10; i++) 
         {
-            if (highest[i].moreProfit(highest)) 
+            if (G[i].moreProfit(highest)) 
             {
                 highest = G[i];
             }
         }
-        System.out.print("highest total sales is ");
+        System.out.print("Highest Sales was " + highest.getSales());
         System.out.print(highest.getSales());
         System.out.print("\n");
     }
