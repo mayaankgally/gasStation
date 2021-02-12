@@ -6,6 +6,7 @@ public class gasStation
     private double superprice; //price for a gallon of super
     private double sales; //total sales of stations in dollars
     private double amount; //total amount of gallons in the station
+    public int bestsales;
 
     public gasStation(double r, double s) 
     {
@@ -17,14 +18,14 @@ public class gasStation
 
     public void sellregular(double gallons) 
     {
-        amount -= amount - gallons;
+        amount = amount - gallons;
         sales += regprice * gallons; //multiplication
 
     }
 
     public void sellsuper(double gallons) 
     {
-        amount -= amount - gallons;
+        amount = amount - gallons;
         sales += superprice * gallons;
 
     }
@@ -71,10 +72,10 @@ public class gasStation
         B.sellregular(11);
         B.sellsuper(12);
 
-        System.out.println("Sales = "+ A.getSales());
-        System.out.println("Sales = "+ B.getSales());
-        System.out.println("Gallons = "+ A.getGallons());
-        System.out.println("Gallons = "+ B.getGallons());
+        System.out.println("Sales = "+ Math.round(A.getSales()));
+        System.out.println("Sales = "+ Math.round(B.getSales()));
+        System.out.println("Gallons = "+ Math.round(A.getGallons()));
+        System.out.println("Gallons = "+ Math.round(B.getGallons()));
 
         if (A.moreProfit(B)) 
         {
@@ -93,10 +94,10 @@ public class gasStation
 
         for (int i = 0; i < 10; i++) 
         {
-            G[i].sellregular((int) Math.random() * 20);
-            G[i].sellsuper((int) Math.random() * 20);
-            System.out.println("Gas Station Balance " + i);
-            System.out.println("Gas Station Supply " + G[i].getGallons());
+            G[i].sellregular(Math.random() * 500);
+            G[i].sellsuper(Math.random() * 500);
+            System.out.println("Gas Station " + i + "\n" + " Balance = " + Math.round(G[i].getSales()));
+            System.out.println("Supply = " + Math.round(G[i].getGallons())+ "\n");
             if (G[i].getGallons() == 200 || G[i].getGallons() < 200)
                 {
                     System.out.println("Gas Station " + i + " has less than 200 gallons.");
@@ -110,11 +111,13 @@ public class gasStation
             if (G[i].moreProfit(highest)) 
             {
                 highest = G[i];
+                i = bestsales;
             }
+            System.out.println(i);
         }
-        System.out.print("Highest Sales was " + highest.getSales());
-        System.out.print(highest.getSales());
-        System.out.print("\n");
+        System.out.println("Highest Sales was  Gas Station " + highest + " with $" + Math.round(highest.getSales()));
+        //System.out.print(Math.round(highest.getSales()));
+        //System.out.print("\n");
     }
 }
 //End of program

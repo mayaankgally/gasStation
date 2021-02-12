@@ -1,0 +1,118 @@
+/*                       CSC 17 Lab 1  
+
+                   due BEFORE next week's lab
+
+The first assignment asks you to convert a C++ program into Java, then
+   make some additions to the java programs.  You are expected to also
+   read the C++ to Java tutorial.
+   
+Type "javac progname.java" to compile source code progname.java.  Then
+type "java progname" to run the program.  Remember: if the file name
+is "progname.java", then the public class that contains main must be called
+"progname" as well.
+
+1. In converting the following simple program concerning "gas station"
+   objects, please remember that the "public static void main(String[]
+   av)" method in java must also be inside a class.  In fact, for a
+   stand-alone program, it must be inside a public class that shares
+   the name of the file of the source code.
+
+   INSTEAD OF TRYING TO EDIT THE C++ PROGRAM, I SUGGEST YOU TYPE IT IN
+   FROM SCRATCH.
+*/
+
+/* C++ program for managing gas stations: */
+
+#include<iostream>
+#include<cstdlib>  /* for rand() */
+using namespace std;
+
+class gasStation
+{
+protected:
+ double regularprice;  // price for a gallon of regular
+ double superprice;    // price for a gallon of super
+ double sales;         // total sales of station in dollars
+
+public:
+  // constructor
+  gasStation(double r, double s)
+  {  regularprice = r;  superprice = s; sales = 0; }
+
+  // methods to sell gas, parameter indicates number of gallons
+  void sellregular(double gallons)
+  {
+    sales += regularprice * gallons; // this * is multiplication, not pointer
+  }
+
+  void sellsuper(double gallons)
+  {
+    sales += superprice * gallons;
+  }
+
+  // an accessor method
+  double getsales() { return sales; }
+
+  // method to compare the total sales of one station versus another
+  bool moreprofit(gasStation * other)
+  {
+    return sales > other->sales;
+  }
+
+private:
+  //  method to double prices - can only call internally
+  void gouge() { superprice *= 2; regularprice *= 2; }
+}; // class gasStation
+
+
+int main(int argc, char** argv)
+{
+  gasStation* A = new gasStation(2.69, 3.09);
+  gasStation* B = new gasStation(2.49, 2.99);
+
+  A->sellregular(10);  A->sellsuper(8);
+  B->sellsuper(11);    
+  B->sellregular(12);
+
+  if (A->moreprofit(B)) cout << "station A is more profitable\n";
+    else cout << "station B is more profitable\n";
+
+  // You've made a lot of money and now you own a whole array of gas stations.
+  gasStation** G = new gasStation*[10];  // creates 10 null pointers
+  for(int i=0;i<10;i++) G[i] = new gasStation(2.59,3.19);
+
+  // make up some additional transactions for each station: Use 
+  // (int)(Math.random()*20) in Java
+  for(int i=0;i<10;i++) G[i]->sellregular(rand()%20); 
+  // make up some more yourself...
+
+  // Loop to find gas station with highest sales value.
+  gasStation *highest = G[0];
+  for(int i=1;i<10;i++) if (G[i]->moreprofit(highest)) highest = G[i];
+  cout << "highest total sales is " << highest->getsales() << endl;
+}//main
+
+/*
+2.  This part asks you to modify the Java program you just created.
+
+    The gas station only has a finite amount of each type of gas.
+    Add instance variables that track how many gallons of each type of
+    gas the station has to sell.  You can fix the initial value to be
+    1000 gallons each.
+
+    Add a method to print current supply
+
+    Modify the sellregular/super methods to subtract from supply after
+    each sale.  
+
+2b. Further modify the sellregular/super methods to call the internal
+    gouge() function when the total supply of gass drops below 200 gallons.
+    Now you have to becareful that this should only be called once:
+    For example:
+    A->currentSupply(); // say current supply is 210 gallons (regular+super)
+    A->sellregular(20); // supply now 190 gallons, CALL GOUGE to double prices
+    A->sellregular(10); // supply now 180 gallons, but DON'T call gouge again!
+
+    You may need to declare additional variables, maybe even functions, 
+    to implement this algorithm correctly.
+*/
